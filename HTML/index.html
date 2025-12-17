@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nira - Grace in Every Thread</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Playfair Display', serif;
+      background: url('https://www.transparenttextures.com/patterns/gplay.png');
+      background-color: #fefdfc;
+      color: #333;
+      padding-bottom: 60px;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 40px;
+      background: url('nav bar background.png') no-repeat center center;
+      background-size: cover;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: 90px;
+    }
+
+    .navbar img.logo {
+      height: 70px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links li a {
+      text-decoration: none;
+      color: #333;
+      font-size: 22px;
+      font-weight: 500;
+      transition: 0.3s ease;
+    }
+
+    .nav-links li a:hover {
+      color: #6a994e;
+    }
+
+    .nav-links .new a {
+      color: #d62828;
+      font-size: 24px;
+      font-weight: bold;
+      position: relative;
+      animation: pulse 1.5s infinite;
+    }
+
+    .nav-links .new a::after {
+      content: "🔥";
+      position: absolute;
+      right: -20px;
+      top: -5px;
+      font-size: 20px;
+      animation: bounce 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.07); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 25px;
+      font-size: 22px;
+    }
+
+    .nav-icons i {
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .nav-icons i:hover {
+      color: #6a994e;
+    }
+
+    /* Poster */
+    .poster {
+      display: flex;
+      justify-content: center;
+      padding: 40px 0;
+    }
+
+    .poster img {
+      width: 90%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Section Heading */
+    .section-divider {
+      width: 60%;
+      height: 1px;
+      background-color: #ccc;
+      margin: 50px auto 20px;
+      opacity: 0.3;
+    }
+
+    .section-heading {
+      text-align: center;
+      font-size: 28px;
+      color: #5c3b27;
+      margin-bottom: 20px;
+    }
+
+    /* Video Slider */
+    .slider-container {
+      position: relative;
+      width: 70%;
+      margin: 40px auto;
+      overflow: hidden;
+      border-radius: 10px;
+      background-color: white;
+    }
+
+    .slider {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+    }
+
+    .slide video {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(255, 255, 255, 0.7);
+      border: none;
+      font-size: 24px;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 100;
+      border-radius: 50%;
+    }
+
+    .arrow.left { left: 10px; }
+    .arrow.right { right: 10px; }
+
+    /* POPUP Styles */
+    .popup, .cart-panel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 2000;
+      display: none;
+      min-width: 300px;
+      text-align: center;
+    }
+
+    .popup input {
+      margin-top: 15px;
+      padding: 10px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .popup button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #6a994e;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.4);
+      z-index: 1500;
+      display: none;
+    }
+
+    /* Cart Slide-in Panel */
+    .cart-panel {
+      top: 0;
+      right: 0;
+      left: auto;
+      transform: none;
+      width: 50%;
+      height: 100%;
+      border-radius: 0;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .slider-container { width: 95%; }
+      .poster img { width: 95%; }
+      .cart-panel { width: 90%; }
+    }
+
+ /* Dropdown container */
+.nav-links .dropdown {
+  position: relative;
+}
+
+/* Top level link */
+.nav-links .dropdown > a {
+  cursor: pointer;
+  position: relative;
+}
+
+/* Dropdown menu */
+.nav-links .dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  padding: 10px 0;
+  border-radius: 6px;
+  z-index: 1000;
+}
+
+/* Dropdown visible on hover */
+.nav-links .dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Items inside the dropdown */
+.nav-links .dropdown-content li {
+  list-style: none;
+  padding: 10px 20px;
+}
+
+.nav-links .dropdown-content li a {
+  color: #333;
+  text-decoration: none;
+  font-size: 18px;
+  display: block;
+}
+
+.nav-links .dropdown-content li a:hover {
+  background-color: #f3f3f3;
+}
+
+
+
+  </style>
+</head>
+<body>
+
+  <!-- Overlay for popups -->
+  <div class="overlay" id="overlay" onclick="closePopups()"></div>
+
+  <!-- Popups -->
+<!-- Popups -->
+<div class="popup" id="searchPopup">
+    <label for="searchInput">Search a product</label><br>
+    <input type="text" id="searchInput" placeholder="Type product name..." />
+  </div>
+  
+  <div class="popup" id="loginPopup">
+    <label for="loginEmail">Login</label><br>
+    <input type="email" id="loginEmail" placeholder="Enter your email" />
+  </div>
+  
+  <div class="popup" id="wishlistPopup">
+    <label for="wishlistItem">Add to my wish list</label><br>
+    <input type="text" id="wishlistItem" placeholder="Enter item name..." />
+    <button onclick="closePopups()">Continue Shopping</button>
+  </div>
+  
+  <div class="cart-panel" id="cartPanel">
+    <h2 style="margin-bottom: 20px;">Your bag is empty</h2>
+    <button onclick="closePopups()">Continue Shopping</button>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <img src="nira logo.png" alt="Nira Logo" class="logo">
+    <ul class="nav-links">
+        <li class="new"><a href="press release nira (2).pdf" target="_blank">NEW</a></li>
+
+        <li><a href="home.html" target="_blank">Home</a></li>
+
+        <li class="dropdown">
+            <a href="#">Shop All</a>
+            <ul class="dropdown-content">
+              <li><a href="materials.html" target="_blank">Materials</a></li>
+              <li><a href="saree-collection.html" target="_blank">Saree Collection</a></li>
+            </ul>
+          </li>
+          
+          
+    </ul>
+    <div class="nav-icons">
+      <i class="fas fa-search" onclick="openPopup('searchPopup')" title="Search"></i>
+      <i class="fas fa-user" onclick="openPopup('loginPopup')" title="Login"></i>
+      <i class="fas fa-heart" onclick="openPopup('wishlistPopup')" title="Wishlist"></i>
+      <i class="fas fa-shopping-bag" onclick="openPopup('cartPanel')" title="Cart"></i>
+    </div>
+  </nav>
+
+  <!-- Poster -->
+  <div class="poster">
+    <img src="nira front page.jpeg" alt="Nira Poster">
+  </div>
+
+  <!-- Section Heading -->
+  <div class="section-divider"></div>
+  <h2 class="section-heading">Explore Our Collection</h2>
+
+  <!-- Video Slider -->
+  <div class="slider-container">
+    <div class="slider" id="slider">
+      <div class="slide"><video src="WhatsApp Video 2025-04-14 at 6.16.23 PM.mp4" controls></video></div>
+      <div class="slide"><video src="WhatsApp Video 2025-04-14 at 6.16.45 PM.mp4" controls></video></div>
+      <div class="slide"><video src="WhatsApp Video 2025-04-14 at 6.16.54 PM.mp4" controls></video></div>
+    </div>
+    <button class="arrow left" onclick="moveSlide(-1)">&#10094;</button>
+    <button class="arrow right" onclick="moveSlide(1)">&#10095;</button>
+  </div>
+
+  <script>
+    let slideIndex = 0;
+    const slider = document.getElementById("slider");
+    const slides = document.querySelectorAll(".slide");
+
+    function moveSlide(step) {
+      slideIndex += step;
+      if (slideIndex < 0) slideIndex = slides.length - 1;
+      if (slideIndex >= slides.length) slideIndex = 0;
+      slider.style.transform = `translateX(-${slideIndex * 100}%)`;
+    }
+
+    function openPopup(id) {
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById(id).style.display = 'block';
+    }
+
+    function closePopups() {
+      document.getElementById('overlay').style.display = 'none';
+      const popups = document.querySelectorAll('.popup, .cart-panel');
+      popups.forEach(p => p.style.display = 'none');
+    }
+  </script>
+
+
+  <!-- Footer Section -->
+  <footer style="background: #f9f6f2; font-family: 'Playfair Display', serif; border-top: 1px solid #ddd; margin-top: 60px; color: #3a3a3a;">
+    <div style="padding: 40px 10%; text-align: center;">
+      <h2 style="margin-bottom: 12px; font-size: 26px;">Join Our Circle of Grace</h2>
+      <p style="margin-bottom: 20px; font-size: 16px;">Get the latest styles, stories & seasonal drops straight to your inbox ✨</p>
+      <input type="email" placeholder="Enter your email address" style="padding: 12px 16px; width: 260px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+      <button style="padding: 12px 20px; background-color: #6a994e; color: white; border: none; border-radius: 6px; margin-left: 10px; font-size: 15px; cursor: pointer; transition: background 0.3s ease;">Subscribe</button>
+      <hr style="border: 0; border-top: 1px solid #ccc; margin: 30px auto 10px;">
+    </div>
+  
+    <div style="display: flex; justify-content: space-around; padding: 40px 10%; flex-wrap: wrap; gap: 30px; text-align: left;">
+      <!-- Contact Us -->
+      <div style="flex: 1; min-width: 200px;">
+        <h3 style="margin-bottom: 14px; font-size: 20px;">📞 Contact Us</h3>
+        <p style="margin: 6px 0; font-size: 16px;">+91 9150699909</p>
+        <p style="margin: 6px 0; font-size: 16px;">nira@gmail.com</p>
+      </div>
+  
+      <!-- Customer Service -->
+      <div style="flex: 1; min-width: 200px;">
+        <h3 style="margin-bottom: 14px; font-size: 20px;">🧵 Customer Service</h3>
+        <p style="margin: 6px 0; font-size: 16px;">Track Your Order</p>
+        <p style="margin: 6px 0; font-size: 16px;">FAQ</p>
+        <p style="margin: 6px 0; font-size: 16px;">Call us at 7711771171</p>
+      </div>
+  
+      <!-- Address -->
+      <div style="flex: 1; min-width: 200px;">
+        <h3 style="margin-bottom: 14px; font-size: 20px;">📍 Visit Us</h3>
+        <p style="margin: 6px 0; font-size: 16px;">25th Avenue, Anna Nagar, TN</p>
+        <p style="margin: 6px 0; font-size: 16px;">18th Foot Road, Velachery, TN</p>
+      </div>
+    </div>
+  
+    <div style="text-align: center; padding: 20px 0; font-size: 18px; color: #444; font-style: italic; letter-spacing: 0.5px;">
+      where grace flows in every thread
+    </div>
+  </footer>
+  
+  
+</body>
+</html>
