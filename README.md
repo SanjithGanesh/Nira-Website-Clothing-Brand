@@ -1,4 +1,4 @@
-# NIRA — Clothing Brand Website ✨👗
+# NIRA — Clothing Brand Website 
 
 A simple, clean **multi-page website** I built for my friend **Sandhiya**, the owner of **NIRA** (clothing shop/brand).  
 This repo contains the full static site — built with plain HTML/CSS (mostly inline styles) and a few interactive UI elements.
